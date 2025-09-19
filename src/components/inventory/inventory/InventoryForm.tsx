@@ -15,9 +15,6 @@ export default function InventoryForm() {
     window.print();
   };
 
-  // Tamaño fijo de etiqueta (3x2 pulgadas aprox)
-  const size = { w: Math.round(3 * 96), h: Math.round(2 * 96) };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((s) => ({ ...s, [name]: name === "quantity" ? Number(value) : value }));
