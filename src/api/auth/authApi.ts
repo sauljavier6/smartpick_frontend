@@ -17,7 +17,6 @@ export const login = async (data: IUser) => {
     const error = await res.json();
     throw new Error(error.message || 'Error al iniciar sesión');
   }
-  console.log('res',res)
   return await res.json();
 };
 
