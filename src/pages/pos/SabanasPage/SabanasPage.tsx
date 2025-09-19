@@ -12,7 +12,7 @@ export default function ProductsPage() {
   const [isSearch, setIsSearch] = useState<string>("");
   const [proveedores, setProveedores] = useState<Proveedor[]>([]);
   const [idProveedor, setIdProveedor] = useState<string>();
-
+  console.log(idProveedor);
   useEffect(() => {
     if (isSearch.trim()) {
       const fetchProduct = async () => {

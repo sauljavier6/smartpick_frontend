@@ -1,5 +1,4 @@
 // pages/Home.tsx
-import React from "react";
 import { Link } from "react-router-dom";
 import { FaClipboardList, FaBoxes } from "react-icons/fa"; 
 
