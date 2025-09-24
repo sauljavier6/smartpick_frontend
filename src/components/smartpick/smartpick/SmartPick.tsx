@@ -63,6 +63,7 @@ export default function SmartPick() {
         setLoading(true);
 
         const data = await getOrderTraslateWithItems(tranid, user.ID_User);
+        console.log('data',data)
         setorden(data?.data || null);
         setDepartamento(data?.departamento || []);
 
@@ -189,9 +190,13 @@ export default function SmartPick() {
       }
     };
 
-    const handleImprimir = (tranid: string) => {
-      window.open(`${import.meta.env.VITE_API_URL}/smartpick/pdf/${tranid}`, "_blank");
-    };
+  const handleImprimir = (tranid: string) => {
+    window.open(`${import.meta.env.VITE_API_URL}/smartpick/pdf/${tranid}`, "_blank");
+  };
+
+  const handleExcel = (tranid: string) => {
+    window.open(`${import.meta.env.VITE_API_URL}/smartpick/excel/${tranid}`, "_blank");
+  };
 
 
     
@@ -254,12 +259,20 @@ export default function SmartPick() {
       </div>
 
       {orden?.Completed && (
+      <> 
       <button
         onClick={() => handleImprimir(tranid!)}
         className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md"
       >
         ✅ Descargar reporte
       </button>
+      <button
+        onClick={() => handleExcel(tranid!)}
+        className="mt-1 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md"
+      >
+        ✅ Descargar Layout
+      </button> 
+      </>
       )}
     </div>
 

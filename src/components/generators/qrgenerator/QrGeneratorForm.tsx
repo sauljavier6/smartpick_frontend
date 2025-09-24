@@ -22,6 +22,7 @@ export default function InventoryForm() {
   };
 
   const handleGenerarCodigos = () => {
+    console.log('entro en dinamico')
     setLog([])
     const quantity = Number(form.quantity);
     if (!quantity || quantity <= 0) return;
@@ -39,6 +40,7 @@ export default function InventoryForm() {
   };
 
   const handleGenerarCodigosEstatico = () => {
+    console.log('entro en estatico')
     setLog([])
 
     const quantity = form.quantity;
@@ -48,7 +50,7 @@ export default function InventoryForm() {
 
     // Enviar array completo a Android
     if ((window as any).AndroidPrint) {
-      (window as any).AndroidPrint.printLabels(JSON.stringify(code));
+      (window as any).AndroidPrint.printLabels(JSON.stringify(quantity));
       setLog((prev) => [...prev, `✅ etiqueta enviada a Android`]);
     } else {
       setLog((prev) => [...prev, "⚠️ AndroidPrint no disponible en navegador web"]);
@@ -62,9 +64,9 @@ export default function InventoryForm() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* FORM */}
         <div className="bg-white rounded-2xl shadow-sm border p-4 sm:p-6 space-y-4">
-          <label className="block text-sm font-medium mb-1">Cantidad por caja</label>
+          <label className="block text-sm font-medium mb-1">Cantidad</label>
           <input
-            type="number"
+            type="text"
             value={form.quantity || ""}
             onChange={(e) => setForm({ ...form, quantity: e.target.value })}
             className="w-full border-2 border-gray-400 rounded-xl p-2.5"
