@@ -13,3 +13,20 @@ export const printLabel = async () => {
 
   return await res.json();
 };
+
+
+
+export const getOfertas = async (sucursal: string ) => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/generator?sucursal=${sucursal}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || 'Error al imprimir');
+  }
+
+  return await res.json();
+};

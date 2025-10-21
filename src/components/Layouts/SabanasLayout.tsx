@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { logoutUser } from "../../api/auth/authApi";
 import { getorderbyid } from "../../api/smartpick/orderTraslateApi";
 
-const AdminLayout = () => {
+const SabanasLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [buscar, setBuscar] = useState('');
   const [orden, setOrden] = useState<any[]>([]);
@@ -28,7 +28,6 @@ const AdminLayout = () => {
       console.error('Error al cerrar sesión:', error.message);
     }
   };
-
 
   useEffect(() => {
     if (!buscar) {
@@ -56,7 +55,6 @@ const AdminLayout = () => {
     navigate(`/smartpick/pick/${tranid}`);
   };
 
-
   const wrapperRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -77,10 +75,9 @@ const AdminLayout = () => {
     };
   }, [sidebarOpen]);
 
-
   return (
     <div>
-      <nav ref={wrapperRef} className="fixed top-0 z-50 w-full bg-red-700 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav ref={wrapperRef} className="fixed top-0 z-50 w-full bg-green-700 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -90,7 +87,7 @@ const AdminLayout = () => {
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <span className="sr-only">Open sidebar</span>
-              <img className="w-8 h-8 bg-red-700 dark:bg-gray-800" src="/menuhamburguesa.png" alt="menu" />
+              <img className="w-8 h-8 bg-green-700 dark:bg-gray-800" src="/menuhamburguesa.png" alt="menu" />
             </button>
 
             <img src="/Logo.png" className="hidden sm:block h-8 me-3 rounded" alt="Logo" />
@@ -141,7 +138,7 @@ const AdminLayout = () => {
                 onClick={() => setOpen(!open)}
               >
                 <span className="sr-only">Open user menu</span>
-                <img className="w-9 h-9 bg-red-700 dark:bg-gray-800" src="/user.png" alt="user" />
+                <img className="w-9 h-9 bg-green-700 dark:bg-gray-800" src="/user.png" alt="user" />
               </button>
 
               {open && (
@@ -183,28 +180,16 @@ const AdminLayout = () => {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul className="space-y-2 font-medium">
               <li>
-                  <a href="/smartpick/" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <a href="/sabanas/" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <img src="/Logo.png" alt="Home" className="w-5 h-5 object-contain" />
                     <span className="ms-3">Inicio</span>
                   </a>
               </li>
 
               <li>
-                  <a href="/smartpick/pick" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/wholesale_2422362.png" alt="productos" className="w-5 h-5 object-contain" />
-                    <span className="flex-1 ms-3 whitespace-nowrap">Smart Pick</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="/smartpick/list" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/smartlist.png" alt="productos" className="w-5 h-5 object-contain" />
-                    <span className="flex-1 ms-3 whitespace-nowrap">Smart List</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="/smartpick/print" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/etiquetacedis.png" alt="productos" className="w-5 h-5 object-contain" />
-                    <span className="flex-1 ms-3 whitespace-nowrap">Smart Print</span>
+                  <a href="/sabanas/sabanas" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <img src="/sabana.png" alt="productos" className="w-5 h-5 object-contain" />
+                    <span className="flex-1 ms-3 whitespace-nowrap">Sabanas</span>
                   </a>
               </li>
             </ul>
@@ -222,4 +207,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default SabanasLayout;

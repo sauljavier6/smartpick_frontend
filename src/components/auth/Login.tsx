@@ -28,6 +28,7 @@ export default function Login({ onRegister }: LoginProps) {
     },
     onSuccess: async () => {
       const userdata = await fetchUserData();
+      console.log('login con datos delbackend', userdata)
       setUser(userdata);
       toast.success("Usuario logeado con éxito", { position: "top-right", progressClassName: "custom-progress" });
     },

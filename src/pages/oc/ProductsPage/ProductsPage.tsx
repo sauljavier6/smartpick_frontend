@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import OrdenCompra from "../../../components/oc/OrdenCompra/OrdenCompra";
 import { searchProveedores } from "../../../api/oc/itemApi";
 
@@ -10,10 +10,13 @@ export interface Proveedor {
 
 export default function ProductsPage() {
   const [isSearch, setIsSearch] = useState<string>("");
+  const [isLeadTime, setIsLeadTime] = useState<number>(0);
+  const [idProveedor, setIdProveedor] = useState<string>("");
   const [proveedores, setProveedores] = useState<Proveedor[]>([]);
+  const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
-    if (isSearch.trim()) {
+    if (isSearch.trim() && !isSelected) {
       const fetchProduct = async () => {
         try {
           const data = await searchProveedores(isSearch);
@@ -26,11 +29,27 @@ export default function ProductsPage() {
     } else {
       setProveedores([]);
     }
+    setIsSelected(false);
   }, [isSearch]);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setProveedores([]);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   return (
     <>
-      <div className="p-4 bg-gray-50 rounded-lg flex flex-col gap-2 relative">
+      <div className="p-4 bg-gray-50 rounded-lg flex flex-col gap-2 relative"  ref={wrapperRef}>
         {/* Buscador */}
         <div className="flex gap-5 relative">
           <div className="w-1/3 relative">
@@ -49,7 +68,9 @@ export default function ProductsPage() {
                     key={prov.iv_vendor}
                     className="p-2 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
                     onClick={() => {
-                      setIsSearch(prov.v_companyname)
+                      setIsSearch(prov.v_companyname);
+                      setIdProveedor(prov.iv_vendor);
+                      setIsSelected(true);
                       setProveedores([]);
                     }}
                   >
@@ -62,10 +83,13 @@ export default function ProductsPage() {
           </div>
 
           <input
-            type="text"
+            type="number"
             placeholder="LeadTime"
+            value={isLeadTime===0? "": isLeadTime}
+            onChange={(e) => setIsLeadTime(Number(e.target.value))}
             className="w-1/3 px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300"
           />
+          
           <input
             type="text"
             placeholder="Perioricidad"
@@ -75,7 +99,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="p-4 bg-gray-50 rounded-lg mt-4">
-        <OrdenCompra />
+        <OrdenCompra proveedor={idProveedor} leadtime={isLeadTime} />
       </div>
     </>
   );

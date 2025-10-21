@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { logoutUser } from "../../api/auth/authApi";
 import { getorderbyid } from "../../api/smartpick/orderTraslateApi";
 
-const AdminLayout = () => {
+const UvaLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [buscar, setBuscar] = useState('');
   const [orden, setOrden] = useState<any[]>([]);
@@ -92,6 +92,7 @@ const AdminLayout = () => {
               <span className="sr-only">Open sidebar</span>
               <img className="w-8 h-8 bg-red-700 dark:bg-gray-800" src="/menuhamburguesa.png" alt="menu" />
             </button>
+
 
             <img src="/Logo.png" className="hidden sm:block h-8 me-3 rounded" alt="Logo" />
             <span className="hidden sm:block self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">
@@ -181,33 +182,35 @@ const AdminLayout = () => {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-            <ul className="space-y-2 font-medium">
-              <li>
-                  <a href="/smartpick/" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/Logo.png" alt="Home" className="w-5 h-5 object-contain" />
-                    <span className="ms-3">Inicio</span>
-                  </a>
-              </li>
-
-              <li>
-                  <a href="/smartpick/pick" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/wholesale_2422362.png" alt="productos" className="w-5 h-5 object-contain" />
-                    <span className="flex-1 ms-3 whitespace-nowrap">Smart Pick</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="/smartpick/list" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/smartlist.png" alt="productos" className="w-5 h-5 object-contain" />
-                    <span className="flex-1 ms-3 whitespace-nowrap">Smart List</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="/smartpick/print" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/etiquetacedis.png" alt="productos" className="w-5 h-5 object-contain" />
-                    <span className="flex-1 ms-3 whitespace-nowrap">Smart Print</span>
-                  </a>
-              </li>
-            </ul>
+          <ul className="space-y-2 font-medium">
+            <li>
+              <a
+                href="/uva/"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <img src="/Logo.png" alt="Home" className="w-5 h-5 object-contain" />
+                <span className="ms-3">Inicio</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/uva/print"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <img src="/etiqueta.png" alt="productos" className="w-5 h-5 object-contain" />
+                <span className="flex-1 ms-3 whitespace-nowrap">Uva Print</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/uva/upload"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <img src="/etiqueta.png" alt="productos" className="w-5 h-5 object-contain" />
+                <span className="flex-1 ms-3 whitespace-nowrap">Uva Design</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </aside>
       
@@ -222,4 +225,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default UvaLayout;

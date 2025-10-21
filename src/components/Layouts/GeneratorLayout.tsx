@@ -1,7 +1,7 @@
 
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { logoutUser } from "../../api/auth/authApi";
 
 const AdminLayout = () => {
@@ -26,10 +26,31 @@ const AdminLayout = () => {
     }
   };
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node) && sidebarOpen) {
+        setSidebarOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarOpen]);
+
+
 
   return (
     <div>
-      <nav className="fixed top-0 z-50 w-full bg-red-700 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav ref={wrapperRef} className="fixed top-0 z-50 w-full bg-red-700 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -39,7 +60,7 @@ const AdminLayout = () => {
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <span className="sr-only">Open sidebar</span>
-              <img className="w-8 h-8 bg-red-700" src="/menuhamburguesa.png" alt="menu" />
+              <img className="w-8 h-8 bg-red-700 dark:bg-gray-800" src="/menuhamburguesa.png" alt="menu" />
             </button>
 
 
@@ -56,7 +77,7 @@ const AdminLayout = () => {
                 onClick={() => setOpen(!open)}
               >
                 <span className="sr-only">Open user menu</span>
-                <img className="w-9 h-9 bg-red-700" src="/user.png" alt="user" />
+                <img className="w-9 h-9 bg-red-700 dark:bg-gray-800" src="/user.png" alt="user" />
               </button>
 
               {open && (
@@ -89,6 +110,7 @@ const AdminLayout = () => {
       </nav>
       
       <aside
+        ref={sidebarRef}
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} sm:translate-x-0`}
@@ -109,8 +131,14 @@ const AdminLayout = () => {
               </li>
               <li>
                   <a href="/generator/qr" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <img src="/codigoqr.png" alt="productos" className="w-5 h-5 object-contain" />
+                    <img src="/codigobarras.png" alt="productos" className="w-5 h-5 object-contain" />
                     <span className="flex-1 ms-3 whitespace-nowrap">Generador de etiquetas</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="/generator/cenefas" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <img src="/cenefas.png" alt="productos" className="w-5 h-5 object-contain" />
+                    <span className="flex-1 ms-3 whitespace-nowrap">Impresion de cenefas</span>
                   </a>
               </li>
             </ul>

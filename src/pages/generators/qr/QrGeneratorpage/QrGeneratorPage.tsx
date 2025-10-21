@@ -5,7 +5,7 @@ export default function InventoryPage() {
 
   return (
     <>
-      <div className="p-4 bg-gray-50 rounded-lg mt-4">
+      <div className="md:p-4 bg-gray-50 rounded-lg mt-4">
         <QrGeneratorForm />
       </div>
     </>

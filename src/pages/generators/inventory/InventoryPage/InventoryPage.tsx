@@ -4,7 +4,7 @@ export default function InventoryPage() {
 
   return (
     <>
-      <div className="p-4 bg-gray-50 rounded-lg mt-4">
+      <div className="p-2 md:p-4 bg-gray-50 rounded-lg mt-4">
         <InventoryForm />
       </div>
     </>

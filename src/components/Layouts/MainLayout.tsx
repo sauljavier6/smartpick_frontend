@@ -1,11 +1,12 @@
 
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { logoutUser } from "../../api/auth/authApi";
 import { getorderbyid } from "../../api/smartpick/orderTraslateApi";
 
 const AdminLayout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [buscar, setBuscar] = useState('');
   const [orden, setOrden] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
@@ -55,22 +56,39 @@ const AdminLayout = () => {
     navigate(`/smartpick/pick/${tranid}`);
   };
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node) && sidebarOpen) {
+        setSidebarOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarOpen]);
 
   return (
     <div>
-      <nav className="fixed top-0 z-50 w-full bg-blue-700 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav ref={wrapperRef} className="fixed top-0 z-50 w-full bg-blue-700 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
             <button
-                data-drawer-target="logo-sidebar"
-                data-drawer-toggle="logo-sidebar"
-                aria-controls="logo-sidebar"
-                type="button"
-                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              type="button"
+              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-                <span className="sr-only">Open sidebar</span>
-                <img className="w-8 h-8 bg-red-700" src="/menuhamburguesa.png" alt="user" />
+              <span className="sr-only">Open sidebar</span>
+              <img className="w-8 h-8 bg-blue-700 dark:bg-gray-800" src="/menuhamburguesa.png" alt="menu" />
             </button>
 
             <img src="/Logo.png" className="hidden sm:block h-8 me-3 rounded" alt="Logo" />
@@ -121,7 +139,7 @@ const AdminLayout = () => {
                 onClick={() => setOpen(!open)}
               >
                 <span className="sr-only">Open user menu</span>
-                <img className="w-9 h-9 bg-blue-700" src="/user.png" alt="user" />
+                <img className="w-9 h-9 bg-blue-700 dark:bg-gray-800" src="/user.png" alt="user" />
               </button>
 
               {open && (
@@ -153,7 +171,13 @@ const AdminLayout = () => {
         </div>
       </nav>
 
-      <aside id="logo-sidebar" className="fixed top-0 left-0 z-40 w-54 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+      <aside
+        ref={sidebarRef}
+        id="logo-sidebar"
+        className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} sm:translate-x-0`}
+        aria-label="Sidebar"
+      >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul className="space-y-2 font-medium">
               <li>
