@@ -27,7 +27,7 @@ export default function CenefasForm() {
   const { data } = useQuery({
     queryKey: ["search", sucursal],
     queryFn: () => getOfertas(sucursal),
-    //enabled: sucursal.length > 0,
+    enabled: sucursal.length > 0,
   });
 
   const categorias: string[] = Array.from(
