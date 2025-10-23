@@ -31,7 +31,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<AuthLayout />}>
-        <Route path="login" element={<AuthPage />} />
+        <Route index element={<AuthPage />} />
       </Route>
 
       {/* Rutas protegidas */}
