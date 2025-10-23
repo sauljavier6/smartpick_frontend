@@ -77,7 +77,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="p-4 bg-gray-50 rounded-lg mt-4">
-        <OrdenCompra />
+        <OrdenCompra proveedor={""} leadtime={0} />
       </div>
     </>
   );

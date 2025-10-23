@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { getUbicaciones } from "../../../api/smartpick/ubicacionApi";
 import { useQuery } from "@tanstack/react-query";
 import Select from "react-select";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Locations from "./Locations";
 import LocationLP from "./LocationLP";
 
@@ -34,14 +34,10 @@ export default function EtiquetasCedis() {
   const [zonaSeleccionada, setzonaSeleccionada] = useState<string[]>([]);
   const [generarlp, setGenerarlp] = useState(false);
 
-  const { control, handleSubmit, register, setValue, watch } =
+  const { register, setValue, watch } =
     useForm<FormValues>({
       defaultValues: { etiqueta: "", zonas: [] },
     });
-
-  const onSubmit = (data: FormValues) => {
-    console.log("Formulario:", data);
-  };
 
   const { data } = useQuery({
     queryKey: ["ubicaciones"],
