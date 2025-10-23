@@ -108,7 +108,7 @@ const UvaHomePage: React.FC = () => {
                 fill="#8884d8"
                 label
               >
-                {data.porPais.map((entry, index) => (
+                {data.porPais.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

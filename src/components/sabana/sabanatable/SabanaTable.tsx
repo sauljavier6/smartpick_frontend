@@ -1,17 +1,4 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-
-interface Reporte {
-  id: number;
-  fechaInicio: string;
-  fechaFin: string;
-  totalDisponibles: number;
-  totalEnUso: number;
-  totalLavanderia: number;
-  totalGeneral: number;
-  creadoPor: string;
-  fechaCreacion: string;
-}
 
 export default function SabanaTable() {
 
