@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Select from "react-select";
-import { getOfertas } from "../../../api/generator/generatorApi";
-import { TemplateCenefa } from "./templatescenefas/TemplateCenefa";
-import { TemplatePrecio } from "./templatescenefas/TemplatePrecio";
+import { getOfertas, postprintCenefabydata, postprintPreciobydata } from "../../../api/generator/generatorApi";
+import { toast } from "react-toastify";
 
 interface Producto {
   item_code: string;
@@ -63,14 +62,34 @@ export default function CenefasForm() {
     { value: "535", label: "535" },
   ];
 
-  const handleImprimir = () => {
-    if (tamano === "especial") {
-      TemplateCenefa(seleccionados);
+  const handleImprimir = async () => {
+    let response;
+
+    if (seleccionados.length === 0) {
+      toast.error("No hay productos seleccionados", {
+        position: "top-right",
+      });
+      return;
     }
-    else if (tamano === "precio") {
-      TemplatePrecio(seleccionados);
+
+    if (tamano === "precio") {
+      response = await postprintPreciobydata(seleccionados);
+    } else if (tamano === "especial") {
+      response = await postprintCenefabydata(seleccionados);
     }
-  }    
+
+    if (!response) {
+      toast.error("No se pudo generar el archivo de impresión", {
+        position: "top-right",
+      });
+      return;
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">

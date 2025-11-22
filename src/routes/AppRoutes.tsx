@@ -24,6 +24,7 @@ import CedisPage from '../pages/generators/cedis/CedisPage';
 import UvaHomePage from '../pages/uva/UvaHome/UvaHomePage';
 import UvaPrintPage from '../pages/uva/UvaPrint/UvaPrintPage';
 import UvaUploadPage from '../pages/uva/UvaUpload/UvaUploadPage';
+import ScannerPage from '../pages/generators/cenefas/ScannerPage';
 
 
 const AppRoutes = () => {
@@ -59,7 +60,8 @@ const AppRoutes = () => {
           <Route index element={<HomePage />} />
           <Route path="inventory" element={<InventoryPage />} />
           <Route path="qr" element={<QrGeneratorPage />} />
-          <Route path="cenefas" element={<CenefasPage />} />
+          <Route path="cenefas" element={<CenefasPage />} />   
+          <Route path="scanner" element={<ScannerPage />} />
         </Route>
  
         {/* Zabanas */}
