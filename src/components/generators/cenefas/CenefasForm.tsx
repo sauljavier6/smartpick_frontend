@@ -23,15 +23,17 @@ export default function CenefasForm() {
   const [sucursal, setSucursal] = useState("");
   const [abierta, setAbierta] = useState<string | null>(null);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["search", sucursal],
     queryFn: () => getOfertas(sucursal),
     enabled: sucursal.length > 0,
   });
 
+  const productos: Producto[] = data?.data || [];
   const categorias: string[] = Array.from(
-    new Set(data?.data?.map((p: Producto) => p.tecla) || [])
+    new Set(productos.map((p) => p.tecla))
   );
+
 
   const opciones = [
     { value: "", label: "Seleccione cenefa" },
@@ -72,6 +74,13 @@ export default function CenefasForm() {
       return;
     }
 
+    if (!tamano) {
+      toast.error("No se seleccionó tipo de impresión", {
+        position: "top-right",
+      });
+      return;
+    }
+
     if (tamano === "precio") {
       response = await postprintPreciobydata(seleccionados);
     } else if (tamano === "especial") {
@@ -89,6 +98,19 @@ export default function CenefasForm() {
     const url = URL.createObjectURL(blob);
 
     window.open(url, "_blank");
+  };
+
+  const calcularPrecioFinal = (p: Producto) => {
+    // Si es precio fijo
+    if (p.TIPO_PROMO === "Precio Fijo") {
+      return p.PRECIO_ESPECIAL ?? null;
+    }
+
+    // Si es porcentaje
+    const precioVenta = Number(p.Precio_Venta) || 0;
+    const porcentaje = Number(p.PRECIO_ESPECIAL) || 0;
+
+    return precioVenta - (precioVenta * (porcentaje / 100));
   };
 
   return (
@@ -119,15 +141,33 @@ export default function CenefasForm() {
       </div>
 
       <div className="md:col-span-2 bg-white rounded-2xl shadow p-4">
-        <h1 className="text-2xl font-bold mb-4 text-center">Cenefas</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">Promociones</h1>
 
-        {categorias?.map((cat, index) => (
+        {/* 🔵 LOADING DENTRO DEL MÓDULO */}
+        {isLoading && (
+          <div className="w-full flex justify-center items-center py-10">
+            <p className="text-lg font-semibold text-gray-600">Cargando datos...</p>
+          </div>
+        )}
+
+        {/* 🟠 SIN DATOS PARA LA SUCURSAL */}
+        {!isLoading && productos.length === 0 && sucursal.length > 0 && (
+          <div className="w-full flex justify-center items-center py-10">
+            <p className="text-lg font-semibold text-gray-500">
+              No hay datos disponibles para esta sucursal.
+            </p>
+          </div>
+        )}
+
+        {/* 🟢 SOLO RENDERIZA CATEGORÍAS SI HAY DATOS */}
+        {!isLoading && productos.length > 0 && categorias.map((cat, index) => (
           <div key={index} className="mb-3 border rounded-sm overflow-hidden">
+
             <button
               onClick={() => setAbierta(abierta === cat ? null : cat)}
               className="w-full text-left p-3 bg-gray-100 font-semibold flex justify-between items-center hover:bg-gray-200"
             >
-              {cat.replace(/^\d+\s*/, "")}{" "}
+              {(cat || "Sin categoría").replace(/^\d+\s*/, "")}
               <span>{abierta === cat ? "▲" : "▼"}</span>
             </button>
 
@@ -140,24 +180,23 @@ export default function CenefasForm() {
                         <th className="text-center px-2 py-1">
                           <input
                             type="checkbox"
-                            checked={data?.data
-                              .filter((p: Producto) => p.tecla === cat)
-                              .every((p: Producto) =>
+                            checked={productos
+                              .filter((p) => p.tecla === cat)
+                              .every((p) =>
                                 seleccionados.some(
                                   (s) => s.item_code === p.item_code
                                 )
                               )}
                             onChange={(e) => {
-                              const productosCat =
-                                data?.data.filter(
-                                  (p: Producto) => p.tecla === cat
-                                ) || [];
+                              const productosCat = productos.filter(
+                                (p) => p.tecla === cat
+                              );
 
                               if (e.target.checked) {
                                 setSeleccionados((prev) => [
                                   ...prev,
                                   ...productosCat.filter(
-                                    (p: { item_code: string }) =>
+                                    (p) =>
                                       !prev.some(
                                         (s) => s.item_code === p.item_code
                                       )
@@ -171,27 +210,18 @@ export default function CenefasForm() {
                             }}
                           />
                         </th>
-                        <th className="p-2 text-left whitespace-nowrap">
-                          Producto
-                        </th>
-                        <th className="p-2 text-center whitespace-nowrap">
-                          UPC
-                        </th>
-                        <th className="p-2 text-center whitespace-nowrap">
-                          Precio
-                        </th>
+                        <th className="p-2 text-left whitespace-nowrap">Producto</th>
+                        <th className="p-2 text-center whitespace-nowrap">UPC</th>
+                        <th className="p-2 text-center whitespace-nowrap">Precio</th>
                         <th className="p-2 whitespace-nowrap">Promo</th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      {data?.data
-                        .filter((p: Producto) => p.tecla === cat)
-                        .map((p: Producto) => (
-                          <tr
-                            key={p.item_code}
-                            className="hover:bg-gray-50 text-sm sm:text-base border-t"
-                          >
+                      {productos
+                        .filter((p) => p.tecla === cat)
+                        .map((p) => (
+                          <tr key={p.item_code} className="hover:bg-gray-50 text-sm sm:text-base border-t">
                             <td className="text-center px-2 py-1">
                               <input
                                 type="checkbox"
@@ -199,28 +229,38 @@ export default function CenefasForm() {
                                   (s) => s.item_code === p.item_code
                                 )}
                                 onChange={(e) => {
-                                  if (e.target.checked) {
+                                  if (e.target.checked)
                                     setSeleccionados((prev) => [...prev, p]);
-                                  } else {
+                                  else
                                     setSeleccionados((prev) =>
                                       prev.filter(
                                         (s) => s.item_code !== p.item_code
                                       )
                                     );
-                                  }
                                 }}
                               />
                             </td>
+
                             <td className="p-2">{p.DESCRIPCION}</td>
                             <td className="p-2 text-center">{p.upc}</td>
-                            <td className="p-2 text-center">
-                              ${p.Precio_Venta?.toFixed(2)}
-                            </td>
+                            <td className="p-2 text-center">${p.Precio_Venta?.toFixed(2)}</td>
+
                             <td className="p-2 text-center text-red-600 font-bold">
-                              ${p.PRECIO_ESPECIAL?.toFixed(2) || "-"}
+                              {(() => {
+                                const precio = calcularPrecioFinal(p);
+                                return precio ? `$${precio.toFixed(2)}` : "-";
+                              })()}
                             </td>
                           </tr>
                         ))}
+
+                      {productos.filter((p) => p.tecla === cat).length === 0 && (
+                        <tr>
+                          <td colSpan={5} className="text-center py-4 text-gray-500 italic">
+                            No hay productos disponibles en esta categoría.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>

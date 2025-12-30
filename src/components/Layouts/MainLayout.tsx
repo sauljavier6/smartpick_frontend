@@ -20,9 +20,9 @@ const AdminLayout = () => {
 
         setUser(null);
 
-        navigate("/login");
+        navigate("/");
       } else {
-        navigate("/login");
+        navigate("/");
       }
     } catch (error: any) {
       console.error('Error al cerrar sesión:', error.message);

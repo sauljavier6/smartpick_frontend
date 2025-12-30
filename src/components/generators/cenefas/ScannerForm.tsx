@@ -73,6 +73,13 @@ export default function ScannerForm() {
       return;
     }
 
+    if (!tamano) {
+      toast.error("No se seleccionó tipo de impresión", {
+        position: "top-right",
+      });
+      return;
+    }
+
     const userId = Number(user?.ID_User);
 
     if (tamano === "precio") {
@@ -93,6 +100,19 @@ export default function ScannerForm() {
 
     window.open(url, "_blank");
     deleteAll();
+  };
+
+  const calcularPrecioFinal = (p: Producto) => {
+    // Si es precio fijo
+    if (p.TIPO_PROMO === "Precio Fijo") {
+      return p.PRECIO_ESPECIAL ?? null;
+    }
+
+    // Si es porcentaje
+    const precioVenta = Number(p.Precio_Venta) || 0;
+    const porcentaje = Number(p.PRECIO_ESPECIAL) || 0;
+
+    return precioVenta - (precioVenta * (porcentaje / 100));
   };
 
   const opciones = [
@@ -127,10 +147,9 @@ export default function ScannerForm() {
             disabled={!data?.data}
             onClick={handleAgregarImprimir}
             className={`w-full rounded-xl py-2 px-4 mt-3 font-semibold transition-all 
-              ${
-                !data?.data
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-red-500 text-white hover:bg-red-400 cursor-pointer shadow-md hover:shadow-lg"
+              ${!data?.data
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-red-500 text-white hover:bg-red-400 cursor-pointer shadow-md hover:shadow-lg"
               }
             `}
           >
@@ -141,10 +160,9 @@ export default function ScannerForm() {
             disabled={!data?.data}
             onClick={handleImprimir}
             className={`w-full rounded-xl py-2 px-4 mt-3 font-semibold transition-all 
-              ${
-                !data?.data
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-400 cursor-pointer shadow-md hover:shadow-lg"
+              ${!data?.data
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-blue-500 text-white hover:bg-blue-400 cursor-pointer shadow-md hover:shadow-lg"
               }
             `}
           >
@@ -155,40 +173,57 @@ export default function ScannerForm() {
 
       <div className="md:col-span-2 bg-white rounded-2xl shadow-2xl p-6 border-l-8 border-red-500 transform hover:scale-[1.01] transition duration-500">
         <h1 className="text-3xl font-extrabold mb-5 text-center text-red-500 border-b-2 border-indigo-100 pb-3">
-          Promoción de Cenefa
+          Promoción
         </h1>
 
-        <div className="space-y-4">
-          <p className="text-2xl font-bold text-gray-900 leading-tight">
-            {data?.data?.DESCRIPCION}
-          </p>
-
-          <span className="inline-block px-4 py-1 text-sm font-semibold tracking-wide text-indigo-700 bg-indigo-100 rounded-full">
-            {data?.data?.TIPO_PROMO}
-          </span>
-
-          <div className="flex items-center space-x-3">
-            <span className="text-base text-gray-500 line-through">
-              Precio Regular: {data?.data?.Precio_Venta}
-            </span>
+        {!data?.data && item.length > 0 && (
+          <div className="w-full text-center py-10 text-gray-400 italic text-lg">
+            No se encontró información para este UPC.
           </div>
+        )}
 
-          <div className="flex items-baseline space-x-2">
-            <span className="text-lg font-medium text-red-500">
-              Precio Final:
-            </span>
-            <span className="text-5xl font-extrabold text-red-700 animate-pulse">
-              {data?.data?.PRECIO_ESPECIAL}
-            </span>
+        {!data?.data && item.length === 0 && (
+          <div className="w-full text-center py-10 text-gray-400 italic text-lg">
+            Escanee un código para mostrar información aquí.
           </div>
+        )}
 
-          <div className="pt-3">
-            <p className="text-xl font-extrabold text-white bg-red-500 p-3 rounded-xl shadow-lg text-center">
-              Usted Ahorra: ${ahorro}
+        {data?.data && (
+          <div className="space-y-4 animate-fadeIn">
+            <p className="text-2xl font-bold text-gray-900 leading-tight">
+              {data.data.DESCRIPCION}
             </p>
+
+            <span className="inline-block px-4 py-1 text-sm font-semibold tracking-wide text-indigo-700 bg-indigo-100 rounded-full">
+              {data.data.TIPO_PROMO}
+            </span>
+
+            <div className="flex items-center space-x-3">
+              <span className="text-base text-gray-500 line-through">
+                Precio Regular: ${data.data.Precio_Venta}
+              </span>
+            </div>
+
+            <div className="flex items-baseline space-x-2">
+              <span className="text-lg font-medium text-red-500">Precio Final:</span>
+              <span className="text-5xl font-extrabold text-red-700 animate-pulse">
+                {(() => {
+                  const precio = calcularPrecioFinal(data.data);
+                  return precio ? `$${precio.toFixed(2)}` : "-";
+                })()}
+              </span>
+            </div>
+
+            <div className="pt-3">
+              <p className="text-xl font-extrabold text-white bg-red-500 p-3 rounded-xl shadow-lg text-center">
+                Usted Ahorra: ${ahorro.toFixed(2)}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
+
+
     </div>
   );
 }

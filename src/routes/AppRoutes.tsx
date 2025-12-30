@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import MainLayout from '../components/Layouts/MainLayout';
 import UvaLayout from '../components/Layouts/UvaLayout';
 import AuthLayout from '../components/Layouts/LoginLayout';
@@ -25,6 +25,7 @@ import UvaHomePage from '../pages/uva/UvaHome/UvaHomePage';
 import UvaPrintPage from '../pages/uva/UvaPrint/UvaPrintPage';
 import UvaUploadPage from '../pages/uva/UvaUpload/UvaUploadPage';
 import ScannerPage from '../pages/generators/cenefas/ScannerPage';
+import ErrorPage from '../pages/error/ErrorPage';
 
 
 const AppRoutes = () => {
@@ -80,7 +81,7 @@ const AppRoutes = () => {
       </Route>
 
       {/* Redirección */}
-      <Route path="*" element={<Navigate to="/dashboard" />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 };

@@ -144,7 +144,7 @@ export const postprintCenefabydata = async (Productos: Producto[] ) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ Productos }),
+    body: JSON.stringify({ Upc: Productos.map(p => p.upc) }),
   });
 
   if (!res.ok) {
@@ -153,7 +153,7 @@ export const postprintCenefabydata = async (Productos: Producto[] ) => {
   }
 
   return await res;
-};
+}; 
 
 
 export const postprintPreciobydata = async (Productos: Producto[] ) => {
@@ -161,7 +161,7 @@ export const postprintPreciobydata = async (Productos: Producto[] ) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ Productos }),
+    body: JSON.stringify({ Upc: Productos.map(p => p.upc) }),
   });
 
   if (!res.ok) {

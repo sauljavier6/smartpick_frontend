@@ -17,9 +17,9 @@ const AdminLayout = () => {
 
         setUser(null);
 
-        navigate("/login");
+        navigate("/");
       } else {
-        navigate("/login");
+        navigate("/");
       }
     } catch (error: any) {
       console.error("Error al cerrar sesión:", error.message);
@@ -202,7 +202,7 @@ const AdminLayout = () => {
                   className="w-5 h-5 object-contain"
                 />
                 <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
-                  Impresión
+                  Precios y Promociones
                 </span>
 
                 <svg
@@ -230,7 +230,7 @@ const AdminLayout = () => {
                     href="/generator/cenefas"
                     className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Cenefas
+                    Promociones
                   </a>
                 </li>
                 <li>
