@@ -43,14 +43,14 @@ export default function InventoryForm() {
     console.log('entro en estatico')
     setLog([])
 
-    const quantity = form.quantity;
-    if (!quantity) return;
+    const texto = form.quantity;
+    if (!texto) return;
 
-    setCode([quantity]);
+    const array = [texto];
+    setCode(array);
 
-    // Enviar array completo a Android
     if ((window as any).AndroidPrint) {
-      (window as any).AndroidPrint.printLabels(JSON.stringify(quantity));
+      (window as any).AndroidPrint.printLabels(JSON.stringify(array));
       setLog((prev) => [...prev, `✅ etiqueta enviada a Android`]);
     } else {
       setLog((prev) => [...prev, "⚠️ AndroidPrint no disponible en navegador web"]);
