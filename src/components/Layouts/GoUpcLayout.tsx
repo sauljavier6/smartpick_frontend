@@ -1,62 +1,12 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { useEffect, useRef, useState } from "react";
-import { logoutUser } from "../../api/auth/authApi";
+import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 const GoUpcLayout = () => {
-  const [isCenefasOpen, setIsCenefasOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [open, setOpen] = useState(false);
-  const { user, setUser } = useAuth();
-  const navigate = useNavigate();
-
-  const handleAuthAction = async () => {
-    try {
-      if (user) {
-        await logoutUser();
-
-        setUser(null);
-
-        navigate("/");
-      } else {
-        navigate("/");
-      }
-    } catch (error: any) {
-      console.error("Error al cerrar sesión:", error.message);
-    }
-  };
-
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const sidebarRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node) &&
-        sidebarOpen
-      ) {
-        setSidebarOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [sidebarOpen]);
 
   return (
     <div>
       <nav
-        ref={wrapperRef}
         className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
       >
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
