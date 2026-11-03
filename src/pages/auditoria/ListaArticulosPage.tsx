@@ -14,7 +14,7 @@ export default function ListaArticulosPage() {
   useEffect(() => {
     let activo = true;
     setCargando(true);
-    consultarArticulos({ buscar: filtro, sucursal: 'TODAS', pagina, limite: 25 }).then(r => {
+    consultarArticulos({ buscar: filtro, pagina, limite: 25 }).then(r => {
       if (activo) { setDatos(r.data); setTotal(r.total); setError(''); }
     }).catch(() => { if (activo) setError('Error al consultar el catálogo'); }).finally(() => { if (activo) setCargando(false); });
     return () => { activo = false; };
@@ -22,7 +22,7 @@ export default function ListaArticulosPage() {
   const descargarExcel = async () => {
     setExportando(true);
     try {
-      const params = new URLSearchParams({ buscar: filtro, sucursal: 'TODAS' });
+      const params = new URLSearchParams({ buscar: filtro });
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auditoria/articulos/excel?${params}`, { credentials: 'include' });
       if (!response.ok) throw new Error('Error al generar Excel');
       const blob = await response.blob();
