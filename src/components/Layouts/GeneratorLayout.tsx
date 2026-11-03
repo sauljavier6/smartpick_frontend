@@ -193,7 +193,7 @@ const AdminLayout = () => {
               <button type="button" onClick={() => setIsAuditoriaOpen(!isAuditoriaOpen)}
                 aria-expanded={isAuditoriaOpen}
                 className="flex items-center w-full p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                <img src="/inventario.png" alt="" className="w-5 h-5 object-contain" />
+                <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 3h6l1 2h3a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3l1-2Z"/><path d="m8 13 3 3 5-6"/></svg>
                 <span className="ms-3 flex-1 text-left">Auditoría</span>
                 <svg className={`w-3 h-3 transition-transform ${isAuditoriaOpen ? "rotate-180" : ""}`} viewBox="0 0 10 6" fill="none" aria-hidden="true">
                   <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="m1 1 4 4 4-4"/>
