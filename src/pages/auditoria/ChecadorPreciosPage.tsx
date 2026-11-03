@@ -9,7 +9,7 @@ export default function ChecadorPreciosPage() {
   const buscar = async (e: React.FormEvent) => {
     e.preventDefault(); setCargando(true); setArticulo(null); setMensaje('');
     try {
-      const encontrado = await consultarArticuloExacto(upc.trim(), 'TODAS');
+      const encontrado = await consultarArticuloExacto(upc.trim());
       setArticulo(encontrado || null);
       if (!encontrado) setMensaje('No se encontró el artículo.');
     } catch { setMensaje('No fue posible consultar el precio.'); }
