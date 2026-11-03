@@ -6,6 +6,10 @@ import GeneratorLayout from "../components/Layouts/GeneratorLayout";
 import SabanasLayout from "../components/Layouts/SabanasLayout";
 
 import ProtectedRoute from "./ProtectedRoute";
+import AuditoriaLayout from "../components/Layouts/AuditoriaLayout";
+import AuditoriaHome from "../pages/auditoria/AuditoriaHome";
+import ListaArticulosPage from "../pages/auditoria/ListaArticulosPage";
+import ChecadorPreciosPage from "../pages/auditoria/ChecadorPreciosPage";
 
 import ProductsPage from "../pages/oc/ProductsPage/ProductsPage";
 import AuthPage from "../pages/authpage/AuthPage";
@@ -43,6 +47,12 @@ const AppRoutes = () => {
 
       {/* Rutas protegidas */}
       <Route element={<ProtectedRoute />}>
+        <Route path="/auditoria" element={<AuditoriaLayout />}>
+          <Route index element={<AuditoriaHome />} />
+          <Route path="articulos" element={<ListaArticulosPage />} />
+          <Route path="precios" element={<ChecadorPreciosPage />} />
+        </Route>
+
         {/* OC / POS */}
         <Route path="/oc" element={<MainLayout />}>
           <Route index element={<OcHomePage />} />
