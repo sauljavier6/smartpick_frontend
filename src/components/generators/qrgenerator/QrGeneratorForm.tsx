@@ -40,20 +40,19 @@ export default function InventoryForm() {
   };
 
   const handleGenerarCodigosEstatico = () => {
-    console.log('entro en estatico')
-    setLog([])
+    console.log("entro en estatico");
+    setLog([]);
 
     const texto = form.quantity;
     if (!texto) return;
 
-    const array = [texto];
-    setCode(array);
+    setCode([texto]);
 
     if ((window as any).AndroidPrint) {
-      (window as any).AndroidPrint.printLabels(JSON.stringify(array));
-      setLog((prev) => [...prev, `✅ etiqueta enviada a Android`]);
-    } else {
-      setLog((prev) => [...prev, "⚠️ AndroidPrint no disponible en navegador web"]);
+      (window as any).AndroidPrint.printLabels(
+        JSON.stringify([texto])
+      );
+      setLog((prev) => [...prev, "✅ etiqueta enviada a Android"]);
     }
   };
 
