@@ -3,14 +3,13 @@ import { consultarArticuloExacto, type ArticuloAuditoria } from '../../api/audit
 const moneda = (valor: number | null) => valor == null ? '—' : Number(valor).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 export default function ChecadorPreciosPage() {
   const [upc, setUpc] = useState('');
-  const [sucursal, setSucursal] = useState('TODAS');
   const [articulo, setArticulo] = useState<ArticuloAuditoria | null>(null);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState('');
   const buscar = async (e: React.FormEvent) => {
     e.preventDefault(); setCargando(true); setArticulo(null); setMensaje('');
     try {
-      const encontrado = await consultarArticuloExacto(upc.trim(), sucursal);
+      const encontrado = await consultarArticuloExacto(upc.trim(), 'TODAS');
       setArticulo(encontrado || null);
       if (!encontrado) setMensaje('No se encontró el artículo.');
     } catch { setMensaje('No fue posible consultar el precio.'); }
@@ -21,7 +20,6 @@ export default function ChecadorPreciosPage() {
     <p className="text-slate-500 mb-6">Escanea el código de barras o captura el UPC y presiona Enter.</p>
     <form onSubmit={buscar} className="bg-white border rounded-xl p-5 flex flex-wrap gap-3">
       <input autoFocus required className="border rounded-lg p-3 flex-1 min-w-48" placeholder="Código UPC o artículo" value={upc} onChange={e => setUpc(e.target.value)}/>
-      <input className="border rounded-lg p-3 w-28" aria-label="Sucursal" value={sucursal} onChange={e => setSucursal(e.target.value.toUpperCase())}/>
       <button disabled={cargando} className="bg-red-700 text-white px-6 rounded-lg disabled:opacity-50">{cargando ? 'Buscando...' : 'Consultar'}</button>
     </form>
     {mensaje && <p className="mt-5 text-red-700">{mensaje}</p>}
