@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { consultarArticulos, type ArticuloAuditoria } from '../../api/auditoria/auditoriaApi';
+import { consultarArticuloExacto, type ArticuloAuditoria } from '../../api/auditoria/auditoriaApi';
 const moneda = (valor: number | null) => valor == null ? '—' : Number(valor).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 export default function ChecadorPreciosPage() {
   const [upc, setUpc] = useState('');
@@ -10,8 +10,7 @@ export default function ChecadorPreciosPage() {
   const buscar = async (e: React.FormEvent) => {
     e.preventDefault(); setCargando(true); setArticulo(null); setMensaje('');
     try {
-      const r = await consultarArticulos({ buscar: upc.trim(), sucursal, limite: 100 });
-      const encontrado = r.data.find(a => String(a.upc) === upc.trim() || String(a.item_code) === upc.trim());
+      const encontrado = await consultarArticuloExacto(upc.trim(), sucursal);
       setArticulo(encontrado || null);
       if (!encontrado) setMensaje('No se encontró el artículo.');
     } catch { setMensaje('No fue posible consultar el precio.'); }
