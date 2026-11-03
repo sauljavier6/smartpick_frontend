@@ -19,7 +19,7 @@ export interface ArticulosRespuesta {
   pagina: number;
   limite: number;
 }
-export async function consultarArticulos(params: { buscar?: string; sucursal?: string; pagina?: number; limite?: number }): Promise<ArticulosRespuesta> {
+export async function consultarArticulos(params: { buscar?: string; pagina?: number; limite?: number }): Promise<ArticulosRespuesta> {
   const query = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== '') query.set(key, String(value));
@@ -29,8 +29,8 @@ export async function consultarArticulos(params: { buscar?: string; sucursal?: s
   return response.json();
 }
 
-export async function consultarArticuloExacto(codigo: string, sucursal: string): Promise<ArticuloAuditoria | null> {
-  const query = new URLSearchParams({ codigo, sucursal });
+export async function consultarArticuloExacto(codigo: string): Promise<ArticuloAuditoria | null> {
+  const query = new URLSearchParams({ codigo });
   const response = await fetch(`${import.meta.env.VITE_API_URL}/auditoria/articulos/consultar?${query}`, { credentials: 'include' });
   if (!response.ok) throw new Error('No se pudo consultar el precio');
   const resultado: { articulo: ArticuloAuditoria | null } = await response.json();
