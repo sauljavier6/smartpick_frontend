@@ -10,6 +10,7 @@ export default function ListaArticulosPage() {
   const [datos, setDatos] = useState<ArticuloAuditoria[]>([]);
   const [total, setTotal] = useState(0);
   const [cargando, setCargando] = useState(false);
+  const [exportando, setExportando] = useState(false);
   const [error, setError] = useState('');
   useEffect(() => {
     let activo = true;
@@ -19,6 +20,25 @@ export default function ListaArticulosPage() {
     }).catch(() => { if (activo) setError('Error al consultar el catálogo'); }).finally(() => { if (activo) setCargando(false); });
     return () => { activo = false; };
   }, [filtro, sucursal, pagina]);
+  const descargarExcel = async () => {
+    setExportando(true);
+    try {
+      const params = new URLSearchParams({ buscar: filtro, sucursal });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auditoria/articulos/excel?${params}`, { credentials: 'include' });
+      if (!response.ok) throw new Error('Error al generar Excel');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'auditoria_articulos.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setError('');
+    } catch { setError('No se pudo descargar el reporte Excel'); }
+    finally { setExportando(false); }
+  };
   return <section>
     <h1 className="text-2xl font-bold mb-1">Lista de artículos</h1>
     <p className="text-slate-500 mb-5">Artículos con y sin promoción · {total.toLocaleString('es-MX')} resultados</p>
@@ -27,6 +47,7 @@ export default function ListaArticulosPage() {
       <input className="border rounded-lg p-3 w-36" aria-label="Sucursal" placeholder="Sucursal" value={sucursal} onChange={e => { setSucursal(e.target.value.toUpperCase()); setPagina(1); }}/>
       <button className="bg-red-700 text-white px-5 rounded-lg" type="submit">Buscar</button>
     </form>
+    <div className="flex justify-end mb-4"><button type="button" onClick={descargarExcel} disabled={exportando || cargando} className="rounded-lg bg-green-700 text-white px-5 py-3 font-medium disabled:opacity-50">{exportando ? "Generando Excel..." : "Descargar Excel"}</button></div>
     {error && <p className="text-red-700 mb-4">{error}</p>}
     <div className="overflow-x-auto bg-white border rounded-xl">
       <table className="w-full text-sm text-left"><thead className="bg-slate-100"><tr>{['Artículo','UPC','Descripción','Proveedor','Precio normal','Precio final','Promoción'].map(h => <th key={h} className="p-3 whitespace-nowrap">{h}</th>)}</tr></thead>
