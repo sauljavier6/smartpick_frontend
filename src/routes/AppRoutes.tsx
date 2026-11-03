@@ -6,7 +6,6 @@ import GeneratorLayout from "../components/Layouts/GeneratorLayout";
 import SabanasLayout from "../components/Layouts/SabanasLayout";
 
 import ProtectedRoute from "./ProtectedRoute";
-import AuditoriaLayout from "../components/Layouts/AuditoriaLayout";
 import AuditoriaHome from "../pages/auditoria/AuditoriaHome";
 import ListaArticulosPage from "../pages/auditoria/ListaArticulosPage";
 import ChecadorPreciosPage from "../pages/auditoria/ChecadorPreciosPage";
@@ -47,12 +46,6 @@ const AppRoutes = () => {
 
       {/* Rutas protegidas */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/auditoria" element={<AuditoriaLayout />}>
-          <Route index element={<AuditoriaHome />} />
-          <Route path="articulos" element={<ListaArticulosPage />} />
-          <Route path="precios" element={<ChecadorPreciosPage />} />
-        </Route>
-
         {/* OC / POS */}
         <Route path="/oc" element={<MainLayout />}>
           <Route index element={<OcHomePage />} />
@@ -78,6 +71,9 @@ const AppRoutes = () => {
           <Route path="qr" element={<QrGeneratorPage />} />
           <Route path="cenefas" element={<CenefasPage />} />
           <Route path="scanner" element={<ScannerPage />} />
+          <Route path="auditoria" element={<AuditoriaHome />} />
+          <Route path="auditoria/articulos" element={<ListaArticulosPage />} />
+          <Route path="auditoria/precios" element={<ChecadorPreciosPage />} />
         </Route>
 
         {/* Zabanas */}
