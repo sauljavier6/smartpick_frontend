@@ -28,3 +28,11 @@ export async function consultarArticulos(params: { buscar?: string; sucursal?: s
   if (!response.ok) throw new Error('No se pudieron consultar los artículos');
   return response.json();
 }
+
+export async function consultarArticuloExacto(codigo: string, sucursal: string): Promise<ArticuloAuditoria | null> {
+  const query = new URLSearchParams({ codigo, sucursal });
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/auditoria/articulos/consultar?${query}`, { credentials: 'include' });
+  if (!response.ok) throw new Error('No se pudo consultar el precio');
+  const resultado: { articulo: ArticuloAuditoria | null } = await response.json();
+  return resultado.articulo;
+}
