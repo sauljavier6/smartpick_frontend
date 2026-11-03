@@ -17,8 +17,8 @@ export default function Login({ onRegister }: LoginProps) {
   useEffect(() => {
     if (!user) return;
     if (user.ID_Rol === 'ANALISTA' || user.ID_Rol === '') navigate('/oc');
-    else if (user.ID_Rol === '') navigate('/smartpick');
-    else if (user.ID_Rol === 'PROGRAMADOR ANALISTA' || user.ID_Rol === 'SUPERVISOR' || user.ID_Rol === 'AUXILIAR') navigate('/generator');
+    else if (user.ID_Rol === '') navigate('/smartpick');   
+    else if (user.ID_Rol === 'PROGRAMADOR ANALISTA' || user.ID_Rol === 'SUPERVISOR' || user.ID_Rol === 'AUXILIAR' || user.ID_Rol === 'AUDITOR INTERNO') navigate('/generator');
   }, [user, navigate]);
 
   const { mutate } = useMutation({
