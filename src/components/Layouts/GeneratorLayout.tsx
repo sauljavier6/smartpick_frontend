@@ -5,6 +5,7 @@ import { logoutUser } from "../../api/auth/authApi";
 
 const AdminLayout = () => {
   const [isCenefasOpen, setIsCenefasOpen] = useState(false);
+  const [isAuditoriaOpen, setIsAuditoriaOpen] = useState(window.location.pathname.includes("/generator/auditoria"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, setUser } = useAuth();
@@ -189,9 +190,18 @@ const AdminLayout = () => {
               </a>
             </li>
             <li>
-              <a href="/auditoria" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                <span className="ms-3">Auditoría</span>
-              </a>
+              <button type="button" onClick={() => setIsAuditoriaOpen(!isAuditoriaOpen)}
+                aria-expanded={isAuditoriaOpen}
+                className="flex items-center w-full p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                <span className="ms-3 flex-1 text-left">Auditoría</span>
+                <svg className={`w-3 h-3 transition-transform ${isAuditoriaOpen ? "rotate-180" : ""}`} viewBox="0 0 10 6" fill="none" aria-hidden="true">
+                  <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="m1 1 4 4 4-4"/>
+                </svg>
+              </button>
+              {isAuditoriaOpen && <ul className="py-2 space-y-2">
+                <li><a href="/generator/auditoria/articulos" className="flex items-center p-2 pl-11 rounded-lg text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Lista de artículos</a></li>
+                <li><a href="/generator/auditoria/precios" className="flex items-center p-2 pl-11 rounded-lg text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Checador de precios</a></li>
+              </ul>}
             </li>
             <li>
               <button
