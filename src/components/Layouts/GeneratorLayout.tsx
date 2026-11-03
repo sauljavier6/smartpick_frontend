@@ -189,6 +189,11 @@ const AdminLayout = () => {
               </a>
             </li>
             <li>
+              <a href="/auditoria" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <span className="ms-3">Auditoría</span>
+              </a>
+            </li>
+            <li>
               <button
                 type="button"
                 className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
